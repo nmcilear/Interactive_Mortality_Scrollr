@@ -2,6 +2,10 @@
 ctmm workflow and abandoned animation attempts, kept as record and due to dependencies and time constraints,
 cannot rewrite/rerun.
 
+## Large input data and generated files are not in this repository:
+the OpenStreetMap road extract for Washington State (`Geofabrik, washington-260912`) and the WSDOT traffic-count shapefile (`road_data/`), the NDVI stack (`ndvi_stack_utm.tif`), and the distance rasters, saved `.rds` checkpoints and animation frames, which are rebuilt by running the scripts in the order given above (`build_fine_distance_rasters.R` makes the rasters)
+
+
 Set the R working directory to this folder before running anything. 
 Change `base_dir` in `anim_00_config.R`, `run_ctmm_full.R`, `patch_meta.R` and `run_bootstrap.R` to the folder holding the Movebank CSV files and `road_data/`. 
 Every script lists its inputs, outputs and run order in the comment block at the top.
