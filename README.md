@@ -41,7 +41,7 @@ python risk_curve_model.py
 - Road exposure is the share of each animal's territory within 250 m of a vehicle-capable road (OpenStreetMap), weighted by the probability of use.
 - The risk model, group medians with bootstrap intervals, the overlap shuffle test, the diagrams and the maps all run in the browser.
 - Each finding is tagged **Shown**, **Suggested** or **Not testable here** based on significance revealed by data
-
+- HTML followed tutorials and inspired by (https://github.com/ONSvisual/svelte-scrolly/) and (https://digitalblog.ons.gov.uk/2021/06/02/how-we-build-scrollytelling-articles/)
 ## Limits  
 
 - The public Movebank dataset holds 70 animals; the source paper reports 72.
