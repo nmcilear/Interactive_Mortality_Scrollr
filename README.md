@@ -6,6 +6,8 @@ An interactive, scrolling explainer of how road exposure, season and species ove
 
 currently refactoring to improve reproducibility and hierarchy
 
+R_Workflow_early_versions directory holds R scripts for ctmm workflow and abandoned animation attempts,
+dependencies and time constraints meant separating and rerunning was not feasible.
 
 ## Structure
 
