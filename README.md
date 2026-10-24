@@ -29,6 +29,24 @@ dependencies and time constraints meant separating and rerunning was not feasibl
 | `tools/make_single_file.py` | Bundles the page into one HTML file. |
 
 
+## Reproducing the HTML 
+Every file in `data/` is produced by 
+
+| Output | Script | Inputs |
+|---|---|---|
+| `data/tracks.js` (daily positions, roads, territory outlines, % of positions near a road) | `tools/build_tracks_data.py` | Movebank event CSV and reference CSV; OpenStreetMap `.gpkg` |
+| `data/monthly_distance.js` (monthly distance-to-road quantiles) | `tools/build_tracks_data.py` | same as above |
+| `data/animals.js` (animals, overlap pairs, death rates, stored risk curves, monthly deaths) | `tools/build_animals_data.py` | `inputs/individual_table.csv`, `inputs/ud_exposure.csv`, `inputs/overlap_pairs.csv` |
+| `inputs/overlap_pairs.csv` | `tools/home_range_overlap.py` | `ctmm_fits_all.RData` and the two tables above |
+| `inputs/individual_table.csv`, `inputs/ud_exposure.csv` | R scripts in `tools/r/` (`run_ctmm_full.R`, `patch_meta.R`, `ud_exposure.R`, `build_individual_table.R`) | Movebank data, OpenStreetMap roads |
+
+
+The three raw inputs are not stored here because they are large (Movebank 24 MB, OpenStreetMap extract 92 MB). 
+Download them from the sources under *Data and credits*. 
+The small tables in `inputs/` are included so `build_animals_data.py` runs without R. 
+In addition to `.rds` checkpoints saved in `R_workflow_early_version/FITS/checkpoints/`
+Rebuilding with the inputs gives the same `data/*.js` content as the live page.
+
 
 ## Reproduce the risk curve
 
