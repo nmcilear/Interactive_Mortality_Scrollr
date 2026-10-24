@@ -8,7 +8,7 @@ An interactive, scrolling explainer of how road exposure, season and species ove
 
 | File | Purpose |
 |---|---|
-| `index.html` | The whole page, in one file. Open it in any browser; it needs no server. |
+| `index.html` | The whole page. Open it in any browser; no server. |
 | `risk_curve_model.py` | Stand-alone Poisson risk model (time at risk as an offset) with an animal-level bootstrap. Reproduces the risk curves and 90% band shown on the page. |
 | `individual_exposure.csv` | One row per animal: species, site, outcome, years tracked and road exposure. Input to the model above. |
 
