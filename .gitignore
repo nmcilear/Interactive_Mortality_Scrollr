@@ -1,0 +1,4 @@
+*.tif
+*.pbf
+*.gpkg
+road_data/

@@ -1,0 +1,29 @@
+Species-level home-range meta-analysis (ctmm::meta) -- CORRECTED residency exclusions
+Individuals used:
+species_by_id
+Bobcat Coyote 
+    35     34 
+
+Full meta-analysis object:
+, , low
+
+           /Bobcat  /Coyote
+Bobcat/ 1.00000000 0.531878
+Coyote/ 0.00743442 1.000000
+
+, , est
+
+          /Bobcat  /Coyote
+Bobcat/ 1.0000000 7.032107
+Coyote/ 0.0511648 1.000000
+
+, , high
+
+          /Bobcat  /Coyote
+Bobcat/ 1.0000000 24.64682
+Coyote/ 0.2136321  1.00000
+
+
+Bobcat / Coyote mean home-range area ratio:
+      low       est      high 
+ 0.531878  7.032107 24.646817 

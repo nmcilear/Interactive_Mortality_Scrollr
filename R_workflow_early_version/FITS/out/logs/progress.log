@@ -1,0 +1,157 @@
+10:20:09 MVCOY68F start 
+10:20:09 MVBOB85F start 
+10:20:09 MVBOB91M start 
+10:20:14 MVBOB91M WARNING: residency assumption questionable (tau_p vs duration) 
+10:20:15 MVBOB91M finish: ok (0.1 min) 
+10:21:38 MVBOB85F finish: ok (1.5 min) 
+10:26:26 MVCOY68F finish: ok (6.3 min) 
+10:37:24 MVCOY68F start 
+10:37:24 MVBOB85F start 
+10:37:24 MVBOB91M start 
+10:37:29 MVBOB91M WARNING: residency assumption questionable (tau_p vs duration) 
+10:37:29 MVBOB91M resid_acf_flag: no variance/CI column found among: SVF, DOF, lag -- flag left NA, inspect figures/MVBOB91M.png instead 
+10:37:31 MVBOB91M finish: ok (0.1 min) 
+10:38:46 MVBOB85F resid_acf_flag: no variance/CI column found among: SVF, DOF, lag -- flag left NA, inspect figures/MVBOB85F.png instead 
+10:38:53 MVBOB85F finish: ok (1.5 min) 
+10:43:14 MVCOY68F resid_acf_flag: no variance/CI column found among: SVF, DOF, lag -- flag left NA, inspect figures/MVCOY68F.png instead 
+10:43:25 MVCOY68F finish: ok (6 min) 
+10:49:31 MVCOY63M start 
+10:49:31 MVCOY58M start 
+10:49:31 MVCOY68F skipped (done) 
+10:49:31 MVCOY79F start 
+10:49:31 NECOY2M start 
+10:49:31 NECOY44M start 
+10:53:44 MVCOY79F finish: ok (4.2 min) 
+10:53:45 NECOY21F start 
+10:54:08 MVCOY63M finish: ok (4.6 min) 
+10:54:08 NECOY4M start 
+10:54:16 NECOY44M finish: ok (4.7 min) 
+10:54:16 NECOY36M start 
+10:54:42 NECOY2M finish: ok (5.2 min) 
+10:54:43 MVCOY81M start 
+10:54:56 MVCOY58M finish: ok (5.4 min) 
+10:54:56 NECOY1F start 
+10:58:12 NECOY21F finish: ok (4.5 min) 
+10:58:12 MVCOY60M start 
+10:58:32 NECOY4M finish: ok (4.4 min) 
+10:58:32 MVBOB66M start 
+10:58:33 NECOY36M finish: ok (4.3 min) 
+10:58:33 NECOY3F start 
+10:58:34 NECOY1F finish: ok (3.6 min) 
+10:58:34 NECOYaF start 
+10:58:48 MVCOY81M finish: ok (4.1 min) 
+10:58:48 MVCOY73M start 
+11:02:08 MVCOY60M finish: ok (3.9 min) 
+11:02:08 NEBOB7F start 
+11:02:29 NECOY3F finish: ok (3.9 min) 
+11:02:29 MVBOB71M start 
+11:02:30 NECOYaF finish: ok (3.9 min) 
+11:02:30 NEBOB6F start 
+11:02:45 MVCOY73M finish: ok (4 min) 
+11:02:46 MVCOY18F start 
+11:03:14 MVBOB66M finish: ok (4.7 min) 
+11:03:14 NEBOB38M start 
+11:05:43 NEBOB7F finish: ok (3.6 min) 
+11:05:43 MVBOB67M start 
+11:05:43 MVCOY18F finish: ok (3 min) 
+11:05:44 MVBOB52M start 
+11:06:10 NEBOB6F finish: ok (3.7 min) 
+11:06:10 NECOY43F start 
+11:06:11 MVBOB71M finish: ok (3.7 min) 
+11:06:11 NECOY17M start 
+11:06:25 NEBOB38M finish: ok (3.2 min) 
+11:06:25 NECOY29M start 
+11:08:26 MVBOB52M finish: ok (2.7 min) 
+11:08:26 MVBOB62M start 
+11:08:33 MVBOB67M finish: ok (2.8 min) 
+11:08:33 NEBOB13F start 
+11:08:53 NECOY29M finish: ok (2.5 min) 
+11:08:53 NEBOB45M start 
+11:08:58 NECOY43F finish: ok (2.8 min) 
+11:08:58 MVBOB76M start 
+11:09:46 NECOY17M WARNING: residency assumption questionable (tau_p vs duration) 
+11:09:52 NECOY17M finish: ok (3.7 min) 
+11:09:52 NEBOB35M start 
+11:10:40 MVBOB62M finish: ok (2.2 min) 
+11:10:40 MVBOB83M start 
+11:10:49 NEBOB13F finish: ok (2.3 min) 
+11:10:50 MVCOY98M start 
+11:10:59 NEBOB45M finish: ok (2.1 min) 
+11:10:59 NECOY20F start 
+11:11:20 MVBOB76M finish: ok (2.4 min) 
+11:11:20 MVBOB85F skipped (done) 
+11:11:21 MVBOB69F start 
+11:12:34 NEBOB35M finish: ok (2.7 min) 
+11:12:34 MVCOY92M start 
+11:13:05 NECOY20F finish: ok (2.1 min) 
+11:13:05 NEBOB25F start 
+11:13:09 MVCOY98M finish: ok (2.3 min) 
+11:13:09 MVBOB80M start 
+11:13:15 MVBOB83M finish: ok (2.6 min) 
+11:13:15 MVCOY82M start 
+11:13:27 MVBOB69F finish: ok (2.1 min) 
+11:13:27 NEBOB23M start 
+11:14:31 MVCOY92M finish: ok (1.9 min) 
+11:14:31 MVCOY56M start 
+11:14:57 MVBOB80M finish: ok (1.8 min) 
+11:14:57 MVCOY59F start 
+11:15:02 MVCOY82M finish: ok (1.8 min) 
+11:15:02 MVBOB51M start 
+11:15:20 NEBOB25F finish: ok (2.2 min) 
+11:15:20 NEBOB16M start 
+11:15:26 NEBOB23M finish: ok (2 min) 
+11:15:26 NEBOB10F start 
+11:16:07 MVCOY56M finish: ok (1.6 min) 
+11:16:07 NEBOB32F start 
+11:16:27 MVCOY59F finish: ok (1.5 min) 
+11:16:27 MVBOB90M start 
+11:16:38 MVBOB51M finish: ok (1.6 min) 
+11:16:39 MVBOB54F start 
+11:17:02 NEBOB16M finish: ok (1.7 min) 
+11:17:03 MVBOB77M start 
+11:17:07 NEBOB10F finish: ok (1.7 min) 
+11:17:07 MVBOB55M start 
+11:17:54 MVBOB90M finish: ok (1.4 min) 
+11:17:54 NEBOB41F start 
+11:17:54 NEBOB32F finish: ok (1.8 min) 
+11:17:54 NEBOB5M start 
+11:18:40 MVBOB55M finish: ok (1.6 min) 
+11:18:40 NEBOB33M start 
+11:18:53 MVBOB54F finish: ok (2.2 min) 
+11:18:53 MVCOY74M start 
+11:19:05 MVBOB77M finish: ok (2 min) 
+11:19:05 MVCOY97M start 
+11:19:31 NEBOB5M finish: ok (1.6 min) 
+11:19:31 MVCOY100F start 
+11:19:51 NEBOB41F finish: ok (2 min) 
+11:19:51 NEBOB37M start 
+11:20:18 MVCOY97M finish: ok (1.2 min) 
+11:20:18 MVBOB88M start 
+11:20:24 NEBOB33M finish: ok (1.7 min) 
+11:20:24 NECOY31M start 
+11:20:24 MVCOY74M finish: ok (1.5 min) 
+11:20:24 NEBOB8M start 
+11:20:43 MVCOY100F finish: ok (1.2 min) 
+11:20:43 MVBOB99F start 
+11:21:06 NEBOB37M finish: ok (1.2 min) 
+11:21:06 MVCOY65M start 
+11:21:08 NEBOB8M finish: ok (0.7 min) 
+11:21:09 NECOY42F start 
+11:21:18 MVBOB88M finish: ok (1 min) 
+11:21:18 MVBOB87M start 
+11:21:25 NECOY31M finish: ok (1 min) 
+11:21:25 NECOY12F start 
+11:21:26 MVBOB99F finish: ok (0.7 min) 
+11:21:26 NECOY14M start 
+11:21:31 NECOY42F WARNING: residency assumption questionable (tau_p vs duration) 
+11:21:33 NECOY42F finish: ok (0.4 min) 
+11:21:33 MVCOY72F start 
+11:21:36 MVCOY65M finish: ok (0.5 min) 
+11:21:36 NEBOB11M start 
+11:21:40 NECOY14M finish: ok (0.2 min) 
+11:21:40 MVBOB91M skipped (done) 
+11:21:42 NECOY12F finish: ok (0.3 min) 
+11:21:44 MVBOB87M finish: ok (0.4 min) 
+11:21:44 NEBOB11M finish: ok (0.1 min) 
+11:21:48 MVCOY72F WARNING: residency assumption questionable (tau_p vs duration) 
+11:21:50 MVCOY72F finish: ok (0.3 min) 
