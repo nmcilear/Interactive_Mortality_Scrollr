@@ -4,6 +4,8 @@ An interactive, scrolling explainer of how road exposure, season and species ove
 
 [Live page](https://nmcilear.github.io/Interactive_Mortality_Scrollr/)
 
+currently refactoring to improve reproducibility and hierarchy
+
 ## What is here
 
 | File | Purpose |
