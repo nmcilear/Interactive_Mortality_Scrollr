@@ -1,0 +1,71 @@
+id,species,sex,site,fate,years_tracked,p250_territory
+MVCOY68F,Coyote,f,Okanogan,Survived/censored,3.58,38.3
+NECOY2M,Coyote,m,Northeast,Survived/censored,1.87,54.9
+MVCOY63M,Coyote,m,Okanogan,Unknown,1.78,54.0
+MVCOY58M,Coyote,m,Okanogan,Human,1.74,66.7
+MVCOY79F,Coyote,f,Okanogan,Survived/censored,1.79,48.1
+NECOY44M,Coyote,m,Northeast,Survived/censored,2.06,78.9
+NECOY21F,Coyote,f,Northeast,Survived/censored,1.83,42.8
+NECOY4M,Coyote,m,Northeast,Human,1.68,59.3
+NECOY36M,Coyote,m,Northeast,Large carnivore,1.54,42.3
+MVCOY81M,Coyote,m,Okanogan,Human,1.46,80.8
+NECOY1F,Coyote,f,Northeast,Large carnivore,1.48,47.6
+MVCOY60M,Coyote,m,Okanogan,Survived/censored,1.56,46.9
+MVBOB66M,Bobcat,m,Okanogan,Survived/censored,1.73,18.6
+NECOY3F,Coyote,f,Northeast,Survived/censored,1.55,86.0
+NECOYaF,Coyote,f,Northeast,Survived/censored,1.36,42.5
+MVCOY73M,Coyote,m,Okanogan,Survived/censored,1.43,58.9
+NEBOB7F,Bobcat,f,Northeast,Survived/censored,1.59,68.9
+MVBOB71M,Bobcat,m,Okanogan,Human,1.48,40.1
+NEBOB6F,Bobcat,f,Northeast,Survived/censored,1.43,15.9
+MVCOY18F,Coyote,f,Okanogan,Human,1.24,68.0
+NEBOB38M,Bobcat,m,Northeast,Survived/censored,1.44,73.4
+MVBOB67M,Bobcat,m,Okanogan,Human,1.86,32.7
+MVBOB52M,Bobcat,m,Okanogan,Survived/censored,1.48,23.9
+NECOY43F,Coyote,f,Northeast,Survived/censored,1.76,32.8
+NECOY17M,Coyote,m,Northeast,Human,0.93,80.2
+NECOY29M,Coyote,m,Northeast,Unknown,1.13,33.6
+MVBOB62M,Bobcat,m,Okanogan,Survived/censored,0.95,35.2
+NEBOB13F,Bobcat,f,Northeast,Survived/censored,1.52,47.0
+NEBOB45M,Bobcat,m,Northeast,Human,0.89,85.1
+MVBOB76M,Bobcat,m,Okanogan,Survived/censored,1.62,49.5
+NEBOB35M,Bobcat,m,Northeast,Other,0.96,69.0
+MVBOB83M,Bobcat,m,Okanogan,Human,1.91,32.2
+MVCOY98M,Coyote,m,Okanogan,Unknown,0.77,36.2
+NECOY20F,Coyote,f,Northeast,Human,0.75,57.8
+MVBOB85F,Bobcat,f,Okanogan,Survived/censored,0.93,32.5
+MVBOB69F,Bobcat,f,Okanogan,Survived/censored,1.56,57.6
+MVCOY92M,Coyote,m,Okanogan,Large carnivore,0.7,66.4
+NEBOB25F,Bobcat,f,Northeast,Survived/censored,1.64,63.2
+MVBOB80M,Bobcat,m,Okanogan,Survived/censored,1.6,35.1
+MVCOY82M,Coyote,m,Okanogan,Human,0.72,57.5
+NEBOB23M,Bobcat,m,Northeast,Survived/censored,1.59,62.3
+MVCOY56M,Coyote,m,Okanogan,Human,0.61,72.8
+MVCOY59F,Coyote,f,Okanogan,Human,0.59,68.7
+MVBOB51M,Bobcat,m,Okanogan,Survived/censored,1.09,35.5
+NEBOB16M,Bobcat,m,Northeast,Survived/censored,1.24,20.9
+NEBOB10F,Bobcat,f,Northeast,Survived/censored,1.55,30.4
+NEBOB32F,Bobcat,f,Northeast,Survived/censored,1.14,76.9
+MVBOB90M,Bobcat,m,Okanogan,Large carnivore,0.6,25.0
+MVBOB54F,Bobcat,f,Okanogan,Other,0.59,29.3
+MVBOB77M,Bobcat,m,Okanogan,Survived/censored,1.52,34.9
+MVBOB55M,Bobcat,m,Okanogan,Other,1.0,14.5
+NEBOB41F,Bobcat,f,Northeast,Survived/censored,1.45,64.2
+NEBOB5M,Bobcat,m,Northeast,Large carnivore,0.71,13.3
+NEBOB33M,Bobcat,m,Northeast,Human,1.93,56.0
+MVCOY74M,Coyote,m,Okanogan,Large carnivore,0.42,50.4
+MVCOY97M,Coyote,m,Okanogan,Human,0.39,73.9
+MVCOY100F,Coyote,f,Okanogan,Human,0.3,45.3
+NEBOB37M,Bobcat,m,Northeast,Human,0.85,73.4
+MVBOB88M,Bobcat,m,Okanogan,Human,1.44,45.1
+NECOY31M,Coyote,m,Northeast,Large carnivore,0.31,80.2
+NEBOB8M,Bobcat,m,Northeast,Human,0.76,60.6
+MVBOB99F,Bobcat,f,Okanogan,Large carnivore,0.33,39.5
+MVCOY65M,Coyote,m,Okanogan,Other,1.24,60.9
+NECOY42F,Coyote,f,Northeast,Human,0.11,24.2
+MVBOB87M,Bobcat,m,Okanogan,Human,0.79,38.5
+NECOY12F,Coyote,f,Northeast,Human,0.64,69.8
+NECOY14M,Coyote,m,Northeast,Human,0.05,42.4
+MVCOY72F,Coyote,f,Okanogan,Other,0.04,55.0
+NEBOB11M,Bobcat,m,Northeast,Other,0.04,44.4
+MVBOB91M,Bobcat,m,Okanogan,Human,0.02,33.9
