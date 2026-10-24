@@ -6,13 +6,27 @@ An interactive, scrolling explainer of how road exposure, season and species ove
 
 currently refactoring to improve reproducibility and hierarchy
 
-## What is here
 
-| File | Purpose |
+## Structure
+
+| Path | Purpose |
 |---|---|
-| `index.html` | The whole page. Open it in any browser; no server. |
-| `risk_curve_model.py` | Stand-alone Poisson risk model (time at risk as an offset) with an animal-level bootstrap. Reproduces the risk curves and 90% band shown on the page. |
-| `individual_exposure.csv` | One row per animal: species, site, outcome, years tracked and road exposure. Input to the model above. |
+| `index.html` | Page structure and text; loads everything below. |
+| `css/style.css` | All styles and design tokens. |
+| `data/animals.js` | Per-animal table, overlap pairs, death rates (precomputed). |
+| `data/tracks.js` | GPS tracks, roads, territory outlines (precomputed). |
+| `data/monthly_distance.js` | Monthly distance-to-road quantiles (precomputed). |
+| `js/01_state_and_helpers.js` | Shared state, helpers, shapes, glossary. |
+| `js/02_charts.js` | Charts A, B, C, E, F, M. |
+| `js/03_risk_model.js` | Live Poisson risk model and bootstrap, chart D. |
+| `js/04_map.js` | Animated map and close-up. |
+| `js/05_render.js` | Redraw-everything orchestration. |
+| `js/06_scrolly_scenes.js` | Scrolling story and explainer diagrams. |
+| `js/07_explorer.js` | Linked full explorer at the end. |
+| `risk_curve_model.py`, `individual_exposure.csv` | Stand-alone model and its input. |
+| `tools/make_single_file.py` | Bundles the page into one HTML file. |
+
+
 
 ## Reproduce the risk curve
 
