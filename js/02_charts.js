@@ -127,7 +127,6 @@ function pE(){
 }
 /* ===== F season ===== */
 // Chart F: human-caused deaths by calendar month, with the regulated hunting/trapping season shaded
-// (1 Sep to 15 Mar from current Washington rules, drawn as Sep-Dec and Jan to mid-March; these dates still need checking against the 2018-22 regulations).
 function pF(){
   const W=500,H=320,L=34,R=8,T0=30,B=22;let out='';const M='JFMAMJJASOND';
   [['Bobcat',0],['Coyote',1]].forEach(([sp,k])=>{
