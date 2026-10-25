@@ -1,4 +1,27 @@
  
+library(readr)
+library(data.table)
+library(janitor)
+library(lubridate)
+
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(forcats)
+
+library(ggplot2)
+library(ggthemes)
+library(patchwork)
+library(scales)
+library(ggpubr)
+
+library(sf)
+library(terra)
+library(ggspatial)
+
+library(ctmm)
+library(move2)
+library(MODISTools)
 
 base_dir   <- "C:/Users/Nic/Documents/ctmm/FITS"   # folder holding the two input CSVs; results go to base_dir/out
 event_file <- "GPS tracking of bobcats and coyotes in northern Washington.csv"                  # Movebank event table (one row per GPS fix)
