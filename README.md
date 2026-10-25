@@ -1,5 +1,7 @@
 # Bobcat and coyote mortality explorer
 
+**For submission purposes, no further changes and edits have been made post 25/10/2026 8:25pm (20:25)
+
 An interactive, scrolling explainer of how road exposure, season and species overlap relate to human-caused mortality in GPS-collared bobcats and coyotes in northern Washington (2018–2022). Built for QUT MXB362 *Advanced Visualisation and Data Science*.
 
 [Live page](https://nmcilear.github.io/Interactive_Mortality_Scrollr/)
