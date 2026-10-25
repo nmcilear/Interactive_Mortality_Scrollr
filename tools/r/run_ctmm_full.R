@@ -1,9 +1,27 @@
-# ---- 1. Settings ------------------------------------------------------------
-# Run order for the AKDE stage: run_ctmm_full.R -> patch_meta.R -> run_bootstrap.R
-# (patch_meta.R is only needed if the residency flags in ctmm_summary.csv were
-# written by a version of this script without the tau_p fix in section 4).
-# Run from a fresh R session:  Rscript run_ctmm_full.R
 
+library(readr)
+library(data.table)
+library(janitor)
+library(lubridate)
+
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(forcats)
+
+library(ggplot2)
+library(ggthemes)
+library(patchwork)
+library(scales)
+library(ggpubr)
+
+library(sf)
+library(terra)
+library(ggspatial)
+
+library(ctmm)
+library(move2)
+library(MODISTools)
 base_dir   <- "C:/Users/Nic/Documents/ctmm/FITS"   # folder holding the two input CSVs; results go to base_dir/out
 event_file <- "GPS tracking of bobcats and coyotes in northern Washington.csv"                  # Movebank event table (one row per GPS fix)
 ref_file   <- "GPS tracking of bobcats and coyotes in northern Washington-reference-data.csv"   # Movebank reference table (one row per animal)
