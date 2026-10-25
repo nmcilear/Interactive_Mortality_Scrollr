@@ -1,4 +1,9 @@
+
 /* Styles for the mortality explorer. Colours and fonts are CSS variables defined at the top. */
+
+/* Fonts: --head for headings, --font for body, --mono for numbers. 
+If the web font fails to load, the system stack takes over. */
+
 :root{
 /* Design tokens. Ink/grey scale, accent teal, species colours (Okabe-Ito), outcome colours (the reddish purple for 'killed by people' is deliberately distinct from both species colours) and confidence-tag colours. */
   --bg:#ffffff; --panel:#ffffff; --ink:#1b2321; --ink2:#4d5854; --ink3:#6f7a76; --line:#dde2df; --grid:#ebeeec;
@@ -20,6 +25,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16p
 h1{font-family:var(--head);font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.15;margin:0 0 6px;font-weight:400;text-wrap:balance}
 .sub{color:var(--ink2);max-width:70ch;margin:0 0 14px}
 .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}.herotxt{flex:1 1 520px;min-width:0}
+/* Silhouettes: .sil is the shape, .silbtn the clickable wrapper. Species colour is set per data-sp;
+   the unselected species fades to .3 opacity when one species is highlighted. */
 .sils{display:flex;align-items:flex-end;gap:14px;margin-bottom:14px}
 .sil{fill:var(--ink);opacity:.88;height:auto}.ico{fill:var(--ink2)}
 .silbtn{background:none;border:0;padding:6px;border-radius:10px;cursor:pointer;color:inherit;line-height:0}

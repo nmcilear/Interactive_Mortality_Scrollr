@@ -23,6 +23,7 @@ let SUF='';const $=id=>document.getElementById(id+SUF);
 // Lookup of an animal's record by its ID.
 const byId=Object.fromEntries(D.inds.map(r=>[r.id,r]));
 const tip=$('tip');
+// Escape text before it goes into innerHTML (tooltips, labels), so a field value can never inject markup. 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const sum=a=>a.reduce((x,y)=>x+y,0);
@@ -35,6 +36,7 @@ function pct(sorted,p){const k=(sorted.length-1)*p/100,f=Math.floor(k),c=Math.ce
 // Percentile bootstrap interval for a median: resample the values with replacement B times, take each median, return the 2.5th and 97.5th percentiles.
 // Used for the intervals on chart B and for the bootstrap explainer (js6), which uses the same seed so the two agree.
 function bootCI(a,seed,B=2000){if(a.length<2)return null;const r=rng(seed),m=[];for(let k=0;k<B;k++){const s=[];for(let i=0;i<a.length;i++)s.push(a[(r()*a.length)|0]);m.push(median(s))}m.sort((x,y)=>x-y);return[pct(m,2.5),pct(m,97.5)]}
+// Index of the current threshold in THR (the 100/250/500/1000 m options).                                 
 const thrIdx=()=>THR.indexOf(S.thr);
 // Road exposure of one animal under the current measure.
 // 'ud': % of the animal's estimated territory (autocorrelated kernel density home range, from ctmm in R) lying within 250 m of a road, weighted by the probability of use (r.p250).
@@ -59,6 +61,7 @@ function outcomeSentence(r){
     case 'Unknown':return `Died, cause unknown${d}.`;
     default:return 'Survived to the end of tracking, or the collar was lost.';}
 }
+// Plain-English description of an animal, e.g. "female bobcat", for sentences and tooltips.                   
 function who(r){return `${r.sex==='f'?'female':'male'} ${r.sp.toLowerCase()}`}
 function expSentence(r){const u=r.p250,f=T.fs[r.id];let t='';if(u!=null)t+=`${u.toFixed(0)}% of its territory lay within 250 m of a road`;if(f)t+=(t?'; ':'')+`${f[1].toFixed(0)}% of its GPS positions did`;return t?t+'.':''}
 function tipFor(r){return `<b>${r.id}</b>: a ${who(r)} at ${r.site}, tracked for ${r.yrs.toFixed(1)} years. ${outcomeSentence(r)}<br>${expSentence(r)}`}
@@ -93,6 +96,8 @@ function shape(f,x,y,r,sel,extra=''){
   return `<circle cx="${x}" cy="${y}" r="${r*.85}" fill="${c}" stroke="${st}" stroke-width="${sw}" ${extra}/>`;
 }
 const legShape=f=>`<svg width="14" height="14" viewBox="-7 -7 14 14" style="width:14px;display:inline-block;overflow:visible">${shape(f,0,0,4.2,false)}</svg>`;
+// ICO: draws a small species silhouette inside an SVG chart by reusing the <symbol> sprite in index.html.
+// Fill is the species colour (SPC); opacity drops to .4 when the other species is highlighted (spOp).
 const ICO=(sp,x,y)=>{const b=sp==='Bobcat';return `<use href="#${b?'sil-bobcat':'sil-coyote'}" x="${x}" y="${y}" width="${b?22:19}" height="14" class="ico" data-sp="${sp}" style="fill:${SPC[sp]};cursor:pointer;opacity:${spOp(sp)==1?1:.4}"/>`};
 const spHead=(sp,x,y,extra='')=>ICO(sp,x,y-12)+`<text x="${x+28}" y="${y}" style="font-weight:650;fill:var(--ink);font-size:13px">${sp==='Bobcat'?'Bobcats':'Coyotes'}</text>${extra}`;
 /* ---------- opacity logic (selection, filters, brush, species) ---------- */

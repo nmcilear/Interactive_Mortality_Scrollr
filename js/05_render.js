@@ -7,6 +7,7 @@ function dataTable(){
 function render(){
   chips();pA();pB();pC();pD();pE();pF();pM();measureCtl('mB');measureCtl('mD');
   document.querySelectorAll('use.ico').forEach(u=>u.onclick=()=>toggleSp(u.dataset.sp));
+  // Silhouette buttons: reflect the current species highlight (S.sp) and toggle it on click.
   document.querySelectorAll('.silbtn').forEach(b=>{b.setAttribute('aria-pressed',String(S.sp===b.dataset.sp));b.onclick=()=>toggleSp(b.dataset.sp)});
   const sb=document.querySelector('.sils');if(S.sp)sb.dataset.sp=S.sp;else delete sb.dataset.sp;
   if(M.view==='close'){M.close=null;setupClose();M.close&&drawMap()}else drawMap();

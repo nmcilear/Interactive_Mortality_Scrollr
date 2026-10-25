@@ -19,6 +19,7 @@ addEventListener('scroll',()=>{if(!scTick)scTick=requestAnimationFrame(scrollSyn
 function refreshAll(){SCR.forEach(o=>o.go(o.visible()?o.pick():Math.max(0,o.cur),true))}
 addEventListener('load',()=>{refreshAll();scrollSync()});
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{refreshAll()});
+// Debounced: redraw once, 250 ms after resizing stops, because the SVG charts are sized from the container width.
 let rfT;addEventListener('resize',()=>{clearTimeout(rfT);rfT=setTimeout(refreshAll,250)});
 // Ease-in-out curve for the map zoom and the histogram build-up.
 const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
@@ -120,6 +121,8 @@ scrolly('sc-life',i=>{S.hlA=[null,['Human'],['Large carnivore'],['Other','Unknow
 (function(){
   const NX=10,NY=7,cs=44,ox=20,oy=14,W=480,H=410;
   const road=[[0,700],[400,700],[700,560],[1000,300]];
+// Distance from point (px,py) to the line segment a-b. The projection t is clamped to 0..1,
+// so beyond either end it measures to the nearest endpoint rather than the infinite line.
   const dseg=(px,py,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((px-a[0])*dx+(py-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(px-a[0]-t*dx,py-a[1]-t*dy)};
   const cells=[];let tp=0;
   for(let j=0;j<NY;j++)for(let i=0;i<NX;i++){const mx=(i+.5)*100,my=(j+.5)*100,p=Math.exp(-((mx-470)**2+(my-330)**2)/(2*170*170)),d=Math.min(...[0,1,2].map(k=>dseg(mx,my,road[k],road[k+1])));cells.push({i,j,p,d});tp+=p}

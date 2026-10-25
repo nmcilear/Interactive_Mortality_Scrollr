@@ -152,5 +152,9 @@ $('vAll').onclick=()=>setView('all');$('vClose').onclick=()=>setView('close');
 $('mmonths').innerHTML=MON.map(m=>`<span>${m[0]}</span>`).join('');
 let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{pA();if(M.view==='all')buildPanels();else{M.close=null;setupClose();drawMap()}},180)});
 // pause when the map is off-screen
+// Auto-play only while the map is on screen, and never against the reader's wishes:
+//  - leaving the screen pauses it (saves battery and avoids a hidden animation loop);
+//  - M.userPaused records an explicit pause, so scrolling back does not restart it;
+//  - reduced-motion users (RM) never get auto-play and must press play.
 new IntersectionObserver(es=>{M.visible=es[0].isIntersecting;if(!M.visible&&M.playing)setPlay(false);else if(M.visible&&!M.userPaused&&!RM&&!M.started){M.started=true;setPlay(true)}},{threshold:.35}).observe($('mapAll').closest('.card'));
 $('mplay').addEventListener('click',()=>{M.userPaused=!M.playing});

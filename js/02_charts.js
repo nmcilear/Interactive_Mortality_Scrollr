@@ -13,6 +13,7 @@ function chips(){
 // Chart A: lifelines. One horizontal line per animal, length = years tracked, marker at the end shows how tracking ended.
 // Rows are sorted by outcome then by length. In narrow windows the two species are stacked instead of side by side.
 // S.hlA (set by the scrolling story) fades every outcome except the ones being talked about.
+// Narrow screens (< 640 px) switch to a simplified layout with shorter labels.
 function pA(){
   const narrow=($('pA').clientWidth||1000)<640;
   const W=narrow?520:1040,colW=narrow?400:420,gap=100,left=14,top=30,rowH=narrow?9.5:10.5;
@@ -83,6 +84,10 @@ function pB(){
   // dots are drawn before the catch layer, so route clicks on dots through elementFromPoint
   const yval=e=>{const b=sv.getBoundingClientRect(),k=b.width/W;return Math.max(0,Math.min(100,(1-((e.clientY-b.top)/k-T0)/(H-T0-B))*100))};
   let drag=null;const catcher=root.querySelector('#brushcatch');
+
+// Pointer-drag brush. setPointerCapture keeps the drag alive if the cursor leaves the chart,
+// and `moved` separates a click (select one threshold) from a drag (set a range).
+
   catcher.addEventListener('pointerdown',e=>{catcher.setPointerCapture(e.pointerId);drag={y0:yval(e),cy:e.clientY,moved:false}});
   catcher.addEventListener('pointermove',e=>{
     if(drag){if(Math.abs(e.clientY-drag.cy)>4)drag.moved=true;if(drag.moved){const y1=yval(e);S.brush=[Math.min(drag.y0,y1),Math.max(drag.y0,y1)];refreshB(root,sy)}}
@@ -169,6 +174,9 @@ const PAIRS=D.pairs.filter(p=>p[2]!=null);
 // Species-label permutation test, run in the browser. Statistic = mean overlap of bobcat-coyote pairs minus mean overlap of same-species pairs.
 // Null distribution: shuffle the species labels 2,000 times, shuffling within each site so site differences are not mistaken for species differences.
 // Reports the observed difference, the 2.5-97.5% range of the shuffles and a two-sided p-value (with the +1 correction).
+// Test statistic: mean Bhattacharyya overlap of pairs whose members have DIFFERENT fates (c),
+// minus the mean for pairs with the SAME fate (s). p[2] is the overlap of pair p. A negative value
+// means animals that died differently overlap less than animals that died alike.
 const PERM=(()=>{const sp={},site={};D.inds.forEach(r=>{sp[r.id]=r.sp;site[r.id]=r.site});
   const diff=m=>{let c=0,nc=0,s=0,ns=0;PAIRS.forEach(p=>{if(m[p[0]]!==m[p[1]]){c+=p[2];nc++}else{s+=p[2];ns++}});return c/nc-s/ns};
   const obs=diff(sp),ids=Object.keys(sp),R=rng(3),null_=[];
@@ -182,6 +190,9 @@ function pC(){
   const ids=D.inds.filter(r=>r.site===S.site).sort((a,b)=>a.sp.localeCompare(b.sp)||a.id.localeCompare(b.id));
   const n=ids.length,cs=Math.min(13,Math.floor(430/n)),L=64,T0=44,W=L+n*cs+8,H=T0+n*cs+8;
   const pm={};PAIRS.forEach(p=>{pm[p[0]+'|'+p[1]]=p[2];pm[p[1]+'|'+p[0]]=p[2]});
+
+// Heatmap fill: v (0 to 1) mixes the light and dark heat colours in the browser (CSS color-mix).
+// The 8% floor keeps the lowest non-zero cells visible against the page background.
   const col=v=>`color-mix(in srgb, var(--heat1) ${Math.round(8+v*92)}%, var(--heat0))`;
   let out='';const nb=ids.filter(r=>r.sp==='Bobcat').length;
   out+=ICO("Bobcat",L,0)+`<text x="${L+28}" y="12" style="font-weight:600;fill:var(--ink)">Bobcats</text>`+ICO("Coyote",L+nb*cs+4,0)+`<text x="${L+nb*cs+32}" y="12" style="font-weight:600;fill:var(--ink)">Coyotes</text>`;
