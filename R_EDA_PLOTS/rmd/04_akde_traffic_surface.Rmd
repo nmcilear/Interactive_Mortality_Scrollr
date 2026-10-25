@@ -1,0 +1,81 @@
+---
+title: "MXB362 Case Study ;AKDE Home Range vs Traffic-Exposure Surface"
+author: "Nicola McIlear (n11798661)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(terra)
+library(tidyterra)
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+library(ctmm)
+# install.packages("ggnewscale")
+
+checkpoint_dir <- "checkpoints"
+utm_crs <- 32611
+
+akde_test <- readRDS(file.path(checkpoint_dir, "akde_test.rds"))
+dist_traffic_raster <- rast(file.path(checkpoint_dir, "dist_traffic_raster.tif"))
+dense_id  <- "MVCOY68F"
+sparse_id <- "MVBOB91M"
+id_species <- c("MVCOY68F" = "Coyote", "MVBOB91M" = "Bobcat")  # ID -> species label
+```
+
+## Panel builder function
+
+```{r akde-panel-fn}
+make_akde_panel <- function(id, akde_list, fill_limits) {
+  akde_95 <- as.sf(akde_list[[id]], level.UD = 0.95, level = 0.95) %>%
+    filter(grepl("est$", name)) %>% st_transform(utm_crs) %>%
+    mutate(level = "Full range (95%)")
+  akde_50 <- as.sf(akde_list[[id]], level.UD = 0.50, level = 0.95) %>%
+    filter(grepl("est$", name)) %>% st_transform(utm_crs) %>%
+    mutate(level = "Core area (50%)")
+  akde_home <- bind_rows(akde_50, akde_95)
+  akde_home$level <- factor(akde_home$level, levels = c("Full range (95%)", "Core area (50%)"))
+
+  buf <- st_buffer(st_as_sfc(st_bbox(akde_95)), dist = 500)  # crop margin, metres
+  dist_crop <- crop(dist_traffic_raster, vect(buf))
+
+  ggplot() +
+    geom_spatraster(data = dist_crop) +
+    scale_fill_gradientn(colours = c("#3f007d", "#807dba", "#bcbddc", "#f2f0f7"),
+                          na.value = NA, name = "Dist. to\ntraffic\nroad (m)",
+                          trans = "sqrt", limits = fill_limits) +
+    ggnewscale::new_scale_fill() +
+    geom_sf(data = akde_home, aes(fill = level), colour = "white", linewidth = 0.4, alpha = 0.75) +
+    scale_fill_manual(values = c("Full range (95%)" = "#a6cee3", "Core area (50%)" = "#1f78b4"),
+                       name = "Home range") +
+    labs(title = paste0(id, " (", id_species[id], ")")) +
+    theme_minimal(base_size = 10) +
+    theme(panel.grid = element_blank(), axis.title = element_blank())
+}
+```
+
+## Shared colour scale, computed across both individuals
+
+```{r akde-shared-scale}
+get_crop_max <- function(id, akde_list) {
+  akde_95 <- as.sf(akde_list[[id]], level.UD = 0.95, level = 0.95) %>%
+    filter(grepl("est$", name)) %>% st_transform(utm_crs)
+  buf <- st_buffer(st_as_sfc(st_bbox(akde_95)), dist = 500)
+  max(values(crop(dist_traffic_raster, vect(buf))), na.rm = TRUE)
+}
+shared_max <- max(get_crop_max(dense_id, akde_test), get_crop_max(sparse_id, akde_test))
+shared_limits <- c(0, shared_max)                     # same limits used on both panels
+```
+
+## Comparison plot
+
+```{r akde-traffic-compare, fig.width=10, fig.height=6}
+panel_dense  <- make_akde_panel(dense_id, akde_test, shared_limits)
+panel_sparse <- make_akde_panel(sparse_id, akde_test, shared_limits)
+
+panel_dense + panel_sparse +
+  plot_annotation(title = "Home range against traffic-exposure surface",
+                   subtitle = "Core (dark) vs full range (light). Same colour scale on both panels.")
+```

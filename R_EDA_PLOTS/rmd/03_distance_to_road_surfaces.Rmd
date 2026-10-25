@@ -1,0 +1,111 @@
+---
+title: "MXB362 Case Study ; Distance-to-Road Surfaces"
+author: "Nicola McIlear (n11798661)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(terra)
+library(tidyterra)
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(ggspatial)
+library(patchwork)
+
+checkpoint_dir <- "checkpoints"
+utm_crs <- 32611
+```
+
+## Building the distance-to-road raster (general accessibility)
+
+```{r dist-road-build}
+ndvi_stack_utm <- rast(file.path(checkpoint_dir, "ndvi_stack_utm.tif"))
+osm_roads_utm  <- readRDS(file.path(checkpoint_dir, "osm_roads_utm.rds"))
+
+template <- ndvi_stack_utm[[1]]                       # extent/resolution/CRS template
+
+roads_mask <- rasterize(vect(osm_roads_utm), template, field = 1, background = NA)
+dist_road_raster <- distance(roads_mask)               # metres to nearest road (any class)
+names(dist_road_raster) <- "dist_to_road_m"
+
+summary(values(dist_road_raster))
+```
+
+## Distance-to-road map
+
+```{r dist-road-map, fig.width=9, fig.height=7}
+ggplot() +
+  geom_spatraster(data = dist_road_raster) +
+  scale_fill_gradientn(
+    colours = c("#3f007d", "#807dba", "#bcbddc", "#f2f0f7"),
+    na.value = NA, name = "Distance to\nroad (m)", trans = "sqrt"
+  ) +
+  annotation_scale(location = "bl", width_hint = 0.25) +
+  annotation_north_arrow(location = "tr", style = north_arrow_minimal()) +
+  labs(title = "Distance to nearest road", subtitle = "General accessibility surface (all path classes)") +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid = element_blank(), axis.title = element_blank())
+```
+
+## Traffic-exposure surface (vehicle-capable roads only)
+
+```{r dist-traffic-build}
+non_vehicle_classes <- c("footway", "path", "steps", "cycleway", "pedestrian",
+                          "bridleway", "corridor", "elevator", "proposed",
+                          "planned", "construction")
+
+traffic_roads_utm <- osm_roads_utm %>% filter(!(highway %in% non_vehicle_classes))
+
+traffic_mask <- rasterize(vect(traffic_roads_utm), template, field = 1, background = NA)
+dist_traffic_raster <- distance(traffic_mask)
+names(dist_traffic_raster) <- "dist_to_traffic_road_m"
+
+summary(values(dist_traffic_raster))
+```
+
+## Comparison: general accessibility vs traffic exposure
+
+```{r dist-compare, fig.width=13, fig.height=7}
+shared_scale <- scale_fill_gradientn(
+  colours = c("#3f007d", "#807dba", "#bcbddc", "#f2f0f7"),
+  na.value = NA, name = "Distance\n(m)", trans = "sqrt",
+  limits = c(0, max(values(dist_traffic_raster), na.rm = TRUE))  # same scale, both panels
+)
+
+panel_access <- ggplot() +
+  geom_spatraster(data = dist_road_raster) + shared_scale +
+  labs(title = "General human accessibility", subtitle = "All path classes") +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid = element_blank(), axis.title = element_blank(), legend.position = "none")
+
+panel_traffic <- ggplot() +
+  geom_spatraster(data = dist_traffic_raster) + shared_scale +
+  annotation_scale(location = "bl", width_hint = 0.3) +
+  labs(title = "Actual traffic exposure", subtitle = "Vehicle-capable roads only") +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid = element_blank(), axis.title = element_blank())
+
+panel_access + panel_traffic +
+  plot_annotation(title = "Human accessibility vs traffic exposure",
+                   subtitle = "Same colour scale on both panels")
+```
+
+```{r dist-stats}
+tibble::tibble(
+  surface = c("General accessibility", "Traffic exposure"),
+  median_m = c(median(values(dist_road_raster), na.rm = TRUE),
+               median(values(dist_traffic_raster), na.rm = TRUE)),
+  mean_m   = c(mean(values(dist_road_raster), na.rm = TRUE),
+               mean(values(dist_traffic_raster), na.rm = TRUE)),
+  max_m    = c(max(values(dist_road_raster), na.rm = TRUE),
+               max(values(dist_traffic_raster), na.rm = TRUE))
+)
+```
+
+```{r dist-checkpoint, eval=FALSE}
+# save for reuse in downstream scripts
+writeRaster(dist_road_raster, file.path(checkpoint_dir, "dist_road_raster.tif"), overwrite = TRUE)
+writeRaster(dist_traffic_raster, file.path(checkpoint_dir, "dist_traffic_raster.tif"), overwrite = TRUE)
+```

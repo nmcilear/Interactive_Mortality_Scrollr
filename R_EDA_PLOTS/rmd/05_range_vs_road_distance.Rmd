@@ -1,0 +1,74 @@
+---
+title: "MXB362 Case Study ; Home-Range Size vs Traffic-Road Distance"
+author: "Nicola McIlear (n11798661)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(terra)
+library(ctmm)
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(tibble)
+# install.packages("ggrepel")
+
+checkpoint_dir <- "checkpoints"
+utm_crs <- 32611
+
+akde_test <- readRDS(file.path(checkpoint_dir, "akde_test.rds"))
+pts_utm   <- readRDS(file.path(checkpoint_dir, "pts_utm.rds"))
+dist_traffic_raster <- rast(file.path(checkpoint_dir, "dist_traffic_raster.tif"))
+
+species_colors <- c("Bobcat" = "#e66101", "Coyote" = "#5e3c99")
+pts_utm <- pts_utm %>%
+  mutate(species = recode(individual.taxon.canonical.name,
+                           "Lynx rufus" = "Bobcat", "Canis latrans" = "Coyote"))
+```
+
+## Extract traffic-road distance per fix
+
+```{r extract-per-fix}
+pts_utm$dist_to_traffic_road_m <- terra::extract(dist_traffic_raster, vect(pts_utm))[, 2]
+sum(is.na(pts_utm$dist_to_traffic_road_m))            # NA count — should be small
+```
+
+## Core-area size and median distance per individual
+
+```{r range-vs-road-data}
+get_core_area_km2 <- function(id, akde_list) {
+  s <- summary(akde_list[[id]], level.UD = 0.5)
+  s$CI["area (square kilometers)", "est"]              # 50% core-area point estimate
+}
+
+akde_ids <- names(akde_test)
+area_df <- tibble(
+  individual.local.identifier = akde_ids,
+  core_area_km2 = sapply(akde_ids, get_core_area_km2, akde_list = akde_test)
+)
+
+road_summary <- pts_utm %>%
+  st_drop_geometry() %>%
+  filter(individual.local.identifier %in% akde_ids) %>%
+  group_by(individual.local.identifier) %>%
+  summarise(median_dist_traffic_road_m = median(dist_to_traffic_road_m, na.rm = TRUE),
+            species = dplyr::first(species), .groups = "drop")
+
+plot_df <- area_df %>% left_join(road_summary, by = "individual.local.identifier")
+plot_df
+```
+
+## Plot
+
+```{r range-vs-road-plot, fig.width=8, fig.height=6}
+ggplot(plot_df, aes(x = median_dist_traffic_road_m, y = core_area_km2, colour = species)) +
+  geom_point(size = 3) +
+  ggrepel::geom_text_repel(aes(label = individual.local.identifier), size = 3, show.legend = FALSE) +
+  scale_colour_manual(values = species_colors, name = "Species") +
+  scale_x_continuous(name = "Median distance to traffic-capable road (m)") +
+  scale_y_continuous(name = expression("Core home-range area ("*km^2*")")) +
+  labs(title = "Home-range size vs traffic-road distance") +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid.minor = element_blank())
+```

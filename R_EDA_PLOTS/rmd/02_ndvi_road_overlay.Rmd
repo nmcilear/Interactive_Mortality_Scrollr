@@ -1,0 +1,56 @@
+---
+title: "MXB362 Case Study ; NDVI and Road Network Overlay"
+author: "Nicola McIlear (n11798661)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(terra)
+library(tidyterra)
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(ggspatial)
+
+checkpoint_dir <- "checkpoints"
+
+ndvi_stack_utm <- rast(file.path(checkpoint_dir, "ndvi_stack_utm.tif"))
+osm_roads_utm  <- readRDS(file.path(checkpoint_dir, "osm_roads_utm.rds"))
+aadt_utm       <- readRDS(file.path(checkpoint_dir, "aadt_utm.rds"))
+```
+
+## NDVI with road-hierarchy overlay
+
+```{r ndvi-road-overlay, fig.width=9, fig.height=7}
+plot_date <- "2020-07-11"                            # composite date, must exist in names(ndvi_stack_utm)
+ndvi_layer <- ndvi_stack_utm[[plot_date]]
+
+aadt_route_ids <- unique(aadt_utm$RouteIdent)         # WSDOT route identifiers
+osm_roads_utm <- osm_roads_utm %>%
+  mutate(is_state_highway = highway %in% c("primary", "primary_link",
+                                            "trunk", "trunk_link",
+                                            "motorway", "motorway_link"))
+
+ggplot() +
+  geom_spatraster(data = ndvi_layer) +
+  scale_fill_gradientn(
+    colours = c("#8c510a", "#f6e8c3", "#66bd63", "#1a9850", "#00441b"),
+    na.value = NA, limits = c(-0.2, 1), name = "NDVI"
+  ) +
+  geom_sf(data = osm_roads_utm %>% filter(!is_state_highway),
+          colour = "lightblue", linewidth = 0.12) +
+  geom_sf(data = osm_roads_utm %>% filter(is_state_highway),
+          aes(linetype = "State highway (AADT available)"),
+          colour = "grey15", linewidth = 0.45) +
+  scale_linetype_manual(values = c("State highway (AADT available)" = "solid"), name = NULL) +
+  annotation_scale(location = "bl", width_hint = 0.25) +
+  annotation_north_arrow(location = "tr", style = north_arrow_minimal()) +
+  labs(
+    title = "Vegetation greenness with road network overlay",
+    subtitle = paste0("NDVI (", plot_date, ") with OpenStreetMap road hierarchy"),
+    caption = "Bold lines: state highways carrying WSDOT AADT data."
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid = element_blank(), axis.title = element_blank())
+```

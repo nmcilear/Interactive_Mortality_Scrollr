@@ -1,0 +1,100 @@
+---
+title: "MXB362 Case Study ; Preliminary NDVI and AKDE Plots"
+author: "Nicola McIlear (n11798661)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(terra)
+library(tidyterra)
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(ggspatial)
+library(ctmm)
+
+checkpoint_dir <- "checkpoints"
+utm_crs <- 32611                                    # UTM zone 11N, study CRS
+
+ndvi_stack_utm <- rast(file.path(checkpoint_dir, "ndvi_stack_utm.tif"))
+akde_test <- readRDS(file.path(checkpoint_dir, "akde_test.rds"))
+dense_id  <- "MVCOY68F"                              # densest bottleneck-test individual
+sparse_id <- "MVBOB91M"                              # sparsest bottleneck-test individual
+```
+
+## NDVI, single composite date
+
+```{r ndvi-single-day, fig.width=8, fig.height=6}
+plot_date <- names(ndvi_stack_utm)[1]                # first available composite date
+ndvi_layer <- ndvi_stack_utm[[plot_date]]
+
+ggplot() +
+  geom_spatraster(data = ndvi_layer) +
+  scale_fill_gradientn(
+    colours = c("#8c510a", "#f6e8c3", "#66bd63", "#1a9850", "#00441b"),
+    na.value = NA, limits = c(-0.2, 1), name = "NDVI"
+  ) +
+  annotation_scale(location = "bl", width_hint = 0.25) +
+  annotation_north_arrow(location = "tr", style = north_arrow_minimal()) +
+  labs(title = "Vegetation greenness (NDVI)", subtitle = plot_date) +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid = element_blank(), axis.title = element_blank())
+```
+
+## Clean AKDE home-range plot, single individual
+
+```{r akde-clean, fig.width=7, fig.height=6}
+akde_95 <- as.sf(akde_test[[dense_id]], level.UD = 0.95, level = 0.95) %>%
+  filter(grepl("est$", name)) %>%                    # keep point-estimate polygon only
+  st_transform(utm_crs) %>%
+  mutate(level = "Full range (95%)")
+
+akde_50 <- as.sf(akde_test[[dense_id]], level.UD = 0.50, level = 0.95) %>%
+  filter(grepl("est$", name)) %>%
+  st_transform(utm_crs) %>%
+  mutate(level = "Core area (50%)")
+
+akde_home_base <- bind_rows(akde_50, akde_95)
+akde_home_base$level <- factor(akde_home_base$level,
+                                levels = c("Full range (95%)", "Core area (50%)"))
+
+fix_points <- readRDS(file.path(checkpoint_dir, "pts_utm.rds")) %>%
+  filter(individual.local.identifier == dense_id)
+
+ggplot() +
+  geom_sf(data = akde_home_base, aes(fill = level), colour = "white", alpha = 0.7) +
+  geom_sf(data = fix_points, colour = "grey20", size = 0.3, alpha = 0.35) +
+  scale_fill_manual(values = c("Full range (95%)" = "#a6cee3", "Core area (50%)" = "#1f78b4"),
+                     name = "Home range") +
+  annotation_scale(location = "bl", width_hint = 0.25) +
+  labs(title = paste0("Home range estimate — ", dense_id),
+       subtitle = "Continuous-time AKDE (ctmm)") +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid = element_blank(), axis.title = element_blank())
+```
+
+## Dense vs sparse individual comparison
+
+```{r akde-compare, fig.width=9, fig.height=5}
+akde_95_sparse <- as.sf(akde_test[[sparse_id]], level.UD = 0.95, level = 0.95) %>%
+  filter(grepl("est$", name)) %>% st_transform(utm_crs)
+
+akde_95_dense <- akde_95                             # already computed above
+
+plot_dense <- ggplot() +
+  geom_sf(data = akde_95_dense, fill = "#1b9e77", colour = "white", alpha = 0.6) +
+  labs(title = dense_id, subtitle = paste0(nrow(fix_points), " fixes")) +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid = element_blank(), axis.title = element_blank())
+
+plot_sparse <- ggplot() +
+  geom_sf(data = akde_95_sparse, fill = "#d95f02", colour = "white", alpha = 0.6) +
+  labs(title = sparse_id, subtitle = "16 fixes") +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid = element_blank(), axis.title = element_blank())
+
+library(patchwork)
+plot_dense + plot_sparse +
+  plot_annotation(title = "Home-range uncertainty: dense vs sparse tracking data")
+```

@@ -1,0 +1,70 @@
+---
+title: "MXB362 Case Study — AADT-Weighted Human Pressure Surface"
+author: "Nicola McIlear (n11798661)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(terra)
+library(sf)
+library(dplyr)
+library(tidyterra)
+library(ggplot2)
+library(ggspatial)
+library(scales)
+
+checkpoint_dir <- "checkpoints"
+utm_crs <- 32611
+
+aadt_utm       <- readRDS(file.path(checkpoint_dir, "aadt_utm.rds"))
+ndvi_stack_utm <- rast(file.path(checkpoint_dir, "ndvi_stack_utm.tif"))
+names(aadt_utm)                                       # confirm the AADT column name
+```
+
+## Coarsened grid and nearest-highway lookup
+
+```{r pressure-grid}
+template <- ndvi_stack_utm[[1]]
+coarse_template <- aggregate(template, fact = 4)       # ~1km cells, for tractability
+
+grid_pts <- as.points(coarse_template) %>% st_as_sf()
+st_crs(grid_pts) <- utm_crs
+
+nearest_idx <- st_nearest_feature(grid_pts, aadt_utm)
+grid_pts$aadt <- aadt_utm$AADT[nearest_idx]             # nearest state-highway AADT value
+grid_pts$dist_to_highway <- st_distance(grid_pts, aadt_utm[nearest_idx, ], by_element = TRUE) %>%
+  as.numeric()
+
+summary(grid_pts$aadt)
+summary(grid_pts$dist_to_highway)
+```
+
+## Pressure score and raster
+
+```{r pressure-raster}
+grid_pts$pressure <- grid_pts$aadt / (1 + grid_pts$dist_to_highway)^2  # inverse-distance decay
+
+pressure_raster <- rasterize(vect(grid_pts), coarse_template, field = "pressure")
+names(pressure_raster) <- "human_pressure"
+```
+
+## Plot
+
+```{r pressure-plot, fig.width=9, fig.height=7}
+ggplot() +
+  geom_spatraster(data = pressure_raster) +
+  scale_fill_gradientn(
+    colours = c("#ffffcc", "#fd8d3c", "#bd0026"),
+    na.value = NA, name = "Human\npressure\n(AADT-weighted)",
+    trans = "log1p", breaks = c(0, 10, 100, 1000), labels = scales::comma
+  ) +
+  annotation_scale(location = "bl", width_hint = 0.25) +
+  labs(
+    title = "AADT-weighted human pressure surface",
+    subtitle = "Exploratory — coverage limited to areas near state highways",
+    caption = "Pressure = AADT / (1 + distance to nearest highway)\u00b2"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid = element_blank(), axis.title = element_blank())
+```

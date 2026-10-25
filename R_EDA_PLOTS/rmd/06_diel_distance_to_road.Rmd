@@ -1,0 +1,121 @@
+---
+title: "MXB362 Case Study ; Diel Distance-to-Road Patterns"
+author: "Nicola McIlear (n11798661)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+# install.packages("suncalc")
+# install.packages("ggnewscale")
+library(suncalc)
+
+checkpoint_dir <- "checkpoints"
+
+df_clean <- readRDS(file.path(checkpoint_dir, "df_clean.rds"))
+species_colors <- c("Bobcat" = "#e66101", "Coyote" = "#5e3c99")
+if (!"species" %in% names(df_clean)) {
+  df_clean <- df_clean %>%
+    mutate(species = recode(individual.taxon.canonical.name,
+                             "Lynx rufus" = "Bobcat", "Canis latrans" = "Coyote"))
+}
+
+site_lat <- 48.32                                     # study-area bbox centroid
+site_lon <- -118.93
+```
+
+## Local time and real per-fix sunrise/sunset
+
+```{r local-time-suncalc}
+diel_df <- df_clean %>%
+  filter(!is.na(dist_to_road_m)) %>%
+  mutate(timestamp_utc = ymd_hms(timestamp, tz = "UTC"),
+         timestamp_local = with_tz(timestamp_utc, tzone = "America/Los_Angeles"),
+         hour = hour(timestamp_local),
+         fix_date = as.Date(timestamp_local))
+
+sun_dates <- diel_df %>% distinct(fix_date) %>%
+  transmute(date = fix_date, lat = site_lat, lon = site_lon)
+
+sun_times <- getSunlightTimes(data = sun_dates, keep = c("sunrise", "sunset"),
+                               tz = "America/Los_Angeles")
+
+diel_df <- diel_df %>%
+  left_join(sun_times %>% select(date, sunrise, sunset), by = c("fix_date" = "date")) %>%
+  mutate(is_night = timestamp_local < sunrise | timestamp_local >= sunset)
+
+sum(is.na(diel_df$is_night))                          # should be 0
+```
+
+## Bin to the ~4-hour GPS fix schedule
+
+```{r bin-hours}
+diel_df <- diel_df %>% mutate(hour_bin = floor(hour / 4) * 4)   # aligns to real sampling schedule
+
+hourly_summary <- diel_df %>%
+  group_by(species, hour_bin) %>%
+  summarise(n = n(),
+            median_dist = median(dist_to_road_m),
+            q25 = quantile(dist_to_road_m, 0.25),
+            q75 = quantile(dist_to_road_m, 0.75),
+            .groups = "drop")
+hourly_summary
+
+night_fraction <- diel_df %>%
+  group_by(hour_bin) %>%
+  summarise(night_frac = mean(is_night), .groups = "drop")  # proportion of dark fixes per bin
+night_fraction
+```
+
+## Extend to the right edge and get reference sunrise/sunset times
+
+```{r extend-and-reference}
+# hour_bin=20 represents 20:00-23:59; duplicating hour_bin=0 as hour_bin=24
+# (same value — time-of-day is cyclic) lets the ribbon reach the right edge.
+closing_rows <- hourly_summary %>% filter(hour_bin == 0) %>% mutate(hour_bin = 24)
+hourly_summary <- bind_rows(hourly_summary, closing_rows) %>% arrange(species, hour_bin)
+
+sun_summary <- diel_df %>%
+  distinct(fix_date, sunrise, sunset) %>%
+  summarise(median_sunrise_hour = median(hour(sunrise) + minute(sunrise) / 60),
+            median_sunset_hour  = median(hour(sunset)  + minute(sunset)  / 60))
+sun_summary
+
+hourly_summary$species <- factor(hourly_summary$species, levels = c("Coyote", "Bobcat"))  # panel order
+```
+
+## Linear diel plot, stacked by species
+
+```{r diel-plot-linear, fig.width=8, fig.height=9}
+ggplot() +
+  geom_rect(data = night_fraction,
+            aes(xmin = hour_bin, xmax = hour_bin + 4, ymin = -Inf, ymax = Inf, alpha = night_frac),
+            fill = "grey30", show.legend = FALSE) +
+  scale_alpha_continuous(range = c(0, 0.35)) +          # 0 = never dark, 0.35 = always dark
+  ggnewscale::new_scale("alpha") +
+  geom_ribbon(data = hourly_summary,
+              aes(x = hour_bin, ymin = 0, ymax = median_dist, fill = species),
+              alpha = 0.2, colour = NA, show.legend = FALSE) +
+  geom_smooth(data = hourly_summary,
+              aes(x = hour_bin, y = median_dist, colour = species),
+              method = "loess", se = FALSE, span = 1.2, linewidth = 0.8, show.legend = FALSE) +
+  geom_point(data = hourly_summary,
+             aes(x = hour_bin, y = median_dist, colour = species), size = 2.5, show.legend = FALSE) +
+  geom_vline(xintercept = sun_summary$median_sunrise_hour, linetype = "dotted", colour = "grey20") +
+  geom_vline(xintercept = sun_summary$median_sunset_hour,  linetype = "dotted", colour = "grey20") +
+  scale_colour_manual(values = species_colors) +
+  scale_fill_manual(values = species_colors) +
+  scale_x_continuous(breaks = seq(0, 24, 4),
+                      labels = c("0:00","4:00","8:00","12:00","16:00","20:00","24:00")) +
+  facet_wrap(~species, ncol = 1, strip.position = "right") +
+  labs(title = "Distance to road by local time of day",
+       subtitle = "Points: 4-hour bin medians. Line: interpolating guide.",
+       caption = "Grey shading: fraction of that hour spent in darkness, averaged across the dataset. Dotted lines: median sunrise/sunset.",
+       y = "Distance to nearest road (m)", x = "Local time") +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid.minor = element_blank(), plot.title = element_text(face = "bold"),
+        strip.text = element_text(face = "bold", size = 12))
+```
