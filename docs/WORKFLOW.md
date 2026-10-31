@@ -18,8 +18,8 @@ Read left to right. Each box is a script or a data file, and each arrow is a fil
 Blue is R, green is Python, orange is the browser, and grey is data.
 
 
-<a href="docs/img/diagram1.png">
-  <img src="docs/img/diagram1.png" alt="diagram1" width="900">
+<a href="img/diagram1.png">
+  <img src="img/diagram1.png" alt="diagram1" width="900">
 </a>
 
 
@@ -33,8 +33,8 @@ so the page can be rebuilt without refitting any animal.
 
 Every animal goes through the same chain. The diamonds are the decisions that change what is reported.
 
-<a href="docs/img/diagram2.png">
-  <img src="docs/img/diagram2.png" alt="diagram2" width="40%">
+<a href="img/diagram2.png">
+  <img src="img/diagram2.png" alt="diagram2" width="40%">
 </a>
 
 
@@ -49,8 +49,8 @@ The three flags (not resident, extrapolated, small N_area) are different checks 
 Each goal has one method and one evidence label. The label depends on what the interval does, not on how strong the result looks.
 
 
-<a href="docs/img/diagram3.png">
-  <img src="docs/img/diagram3.png" alt="diagram1" width="900">
+<a href="img/diagram3.png">
+  <img src="img/diagram3.png" alt="diagram1" width="900">
 </a>
 
 
@@ -61,8 +61,8 @@ Each goal has one method and one evidence label. The label depends on what the i
 The page follows the martini-glass structure (Segel & Heer, 2010). The author controls the narrow stem,
 and the reader controls the wide mouth. Within each part, the order is overview first, then filter, then details on demand (Shneiderman, 1996).
 
-<a href="docs/img/diagram4.png">
-  <img src="docs/img/diagram4.png" alt="diagram4" width="900">
+<a href="img/diagram4.png">
+  <img src="img/diagram4.png" alt="diagram4" width="900">
 </a>
 
 
@@ -73,8 +73,8 @@ and the mouth hands control back once the reader has the context to explore with
 
 ## 5. How the design changed
 
-<a href="docs/img/diagram5.png">
-  <img src="docs/img/diagram5.png" alt="diagram5" width="900">
+<a href="img/diagram5.png">
+  <img src="img/diagram5.png" alt="diagram5" width="900">
 </a>
 
 
