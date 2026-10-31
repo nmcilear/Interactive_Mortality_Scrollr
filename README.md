@@ -11,6 +11,15 @@ currently refactoring to improve reproducibility and hierarchy
 R_Workflow_early_versions directory holds R scripts for ctmm workflow and abandoned animation attempts,
 dependencies and time constraints meant separating and rerunning was not feasible.
 
+
+
+## Limitations and resources
+
+- [Limitations](docs/LIMITATIONS.md): what the data can and cannot show
+- [Resources and references](docs/RESOURCES.md): data, R and Python packages, papers
+
+
+
 ## Structure
 
 
@@ -100,11 +109,6 @@ python risk_curve_model.py
 - Typeface: Open Sans.
 - Colours: Okabe–Ito colour-blind-safe palette for species; outcomes also differ by shape.
 
-
-## Limitations and resources
-
-- [Limitations](docs/LIMITATIONS.md): what the data can and cannot show
-- [Resources and references](docs/RESOURCES.md): data, R and Python packages, papers
 
 ## Author
 
