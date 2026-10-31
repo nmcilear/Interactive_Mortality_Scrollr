@@ -62,7 +62,7 @@ The page follows the martini-glass structure (Segel & Heer, 2010). The author co
 and the reader controls the wide mouth. Within each part, the order is overview first, then filter, then details on demand (Shneiderman, 1996).
 
 <a href="img/diagram4.png">
-  <img src="img/diagram4.png" alt="diagram4" width="900">
+  <img src="img/diagram4.png" alt="diagram4" width="50%">
 </a>
 
 
@@ -74,7 +74,7 @@ and the mouth hands control back once the reader has the context to explore with
 ## 5. How the design changed
 
 <a href="img/diagram5.png">
-  <img src="img/diagram5.png" alt="diagram5" width="900">
+  <img src="img/diagram5.png" alt="diagram5" width= "100%">
 </a>
 
 
